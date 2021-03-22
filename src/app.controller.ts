@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Post, Body, Put, Param, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Query, Post, Body, Put, Param, Delete, Req, Session } from '@nestjs/common';
 import { AppService } from './app.service';
 import { SampleRequestDto } from './dto/SampleRequestDto';
 
@@ -7,8 +7,9 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get("hello")
-  getHello(@Query('name') name): string {
-    return this.appService.getHello(name);
+  getHello(@Query('name') name, @Session() session: Record<string, any>): string {
+    session.visits = session.visits ? session.visits + 1 : 1;
+    return this.appService.getHello(name + ", session visits is : " + session.visits);
   }
 
   @Post("getData")
