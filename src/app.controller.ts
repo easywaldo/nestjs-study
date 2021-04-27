@@ -5,14 +5,12 @@ import { CatsService } from './cats.service';
 import axios, { AxiosResponse } from "axios";
 import { Cat } from './dto/Cat';
 import { SampleRequestDto } from './dto/SampleRequestDto';
-
 @Controller("app")
 export class AppController {
 
   constructor(
     private readonly appService: AppService, 
     private readonly catService: CatsService) {
-    
   }
 
   @Get("hello")
@@ -39,5 +37,10 @@ export class AppController {
     });
 
     return JSON.parse(JSON.stringify(result));
+  }
+
+  @Get("selectMongoDb")
+  selectMongoDb(@Query('country') country): Promise<any> {
+    return this.catService.findMongoDb(country);
   }
 }

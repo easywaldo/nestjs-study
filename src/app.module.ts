@@ -3,6 +3,7 @@ import { HttpModule, Module, NestModule, MiddlewareConsumer } from '@nestjs/comm
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from './loggermiddleware.middleware';
+import { MongooseModule } from '@nestjs/mongoose';
 
 
 @Module({
@@ -16,7 +17,10 @@ import { LoggerMiddleware } from './loggermiddleware.middleware';
         timeout: 5000,
         maxRedirects: 5,
       }),
-    })
+    }),
+    MongooseModule.forRoot('mongodb+srv://easywaldo:rlekflqk1!@cluster0.figii.mongodb.net/sample_airbnb?retryWrites=true&w=majority', {
+      connectionName: 'easywaldo'
+    }),
   ],
   controllers: [
     AppController],

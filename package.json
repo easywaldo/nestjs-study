@@ -23,18 +23,21 @@
   "dependencies": {
     "@nestjs/common": "^7.6.13",
     "@nestjs/core": "^7.6.13",
+    "@nestjs/mongoose": "^7.2.4",
     "@nestjs/platform-express": "^7.6.13",
     "@nestjs/swagger": "^4.8.0",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
+    "connect-redis": "^5.1.0",
+    "express-session": "^1.17.1",
+    "fastify-secure-session": "^2.3.1",
+    "mongocli-client": "0.8.4",
+    "mongoose": "^5.12.5",
+    "redis": "^3.0.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",
-    "swagger-ui-express": "^4.1.6",
-    "class-validator": "^0.13.1",
-    "class-transformer": "^0.4.0",
-    "connect-redis": "^5.1.0",
-    "express-session": "^1.17.1",
-    "redis": "^3.0.2",
-    "fastify-secure-session": "^2.3.1"
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.5.6",
