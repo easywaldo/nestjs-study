@@ -4,6 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from './loggermiddleware.middleware';
 import { MongooseModule } from '@nestjs/mongoose';
+import { MemberController } from './member.controller';
+import { MemberService } from './member.service';
 
 
 @Module({
@@ -23,9 +25,11 @@ import { MongooseModule } from '@nestjs/mongoose';
     }),
   ],
   controllers: [
-    AppController],
+    AppController, MemberController,
+  ],
   providers: [
-    CatsService, AppService],
+    CatsService, AppService, MemberService,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
