@@ -20,7 +20,7 @@ import { MemberService } from './member.service';
         maxRedirects: 5,
       }),
     }),
-    MongooseModule.forRoot('mongodb+srv://easywaldo:rlekflqk1!@cluster0.figii.mongodb.net/sample_airbnb?retryWrites=true&w=majority', {
+    MongooseModule.forRoot('mongodb+srv://easywaldo:password@cluster0.figii.mongodb.net/sample_airbnb?retryWrites=true&w=majority', {
       connectionName: 'easywaldo'
     }),
   ],
