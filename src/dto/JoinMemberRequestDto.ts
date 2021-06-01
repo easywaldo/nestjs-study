@@ -1,6 +1,6 @@
-import { Member } from "src/domain/entity/Member";
 import { ApiProperty } from '@nestjs/swagger';
 import { isString, IsString } from "class-validator";
+import { Member } from 'src/domain/entity/member.schema';
 
 export class JoinMemberRequestDto {
     @ApiProperty()

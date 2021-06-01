@@ -1,7 +1,16 @@
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from 'mongoose';
+
+export type MemberDocument = Member & Document;
+@Schema()
 export class Member {
+    @Prop({required: true})
     private memberName : string;
+    @Prop({required: true})
     private memberId : string;
+    @Prop({required: true})
     private memberAge: number;
+    @Prop({required: true})
     private memberPwd : string;
 
     public constructor(
@@ -15,3 +24,5 @@ export class Member {
         this.memberPwd = memberPwd;
     }
 }
+
+export const MemberSchema = SchemaFactory.createForClass(Member);
