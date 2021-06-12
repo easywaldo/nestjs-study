@@ -41,6 +41,7 @@ export class AppController {
 
   @Get("selectMongoDb")
   selectMongoDb(@Query('country') country): Promise<any> {
+    console.log('req country : ', country);
     return this.catService.findMongoDb(country);
   }
 }

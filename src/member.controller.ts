@@ -16,7 +16,8 @@ export class MemberController {
     }
 
     @Get("findAll")
-    findAll() : Promise<Member[]> {
-        return this.memberService.findAll();
+    async findAll() : Promise<Member[]> {
+        var result = [];
+        return await this.memberService.findAll();
     }
 }

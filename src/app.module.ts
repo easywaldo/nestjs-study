@@ -5,11 +5,10 @@ import { AppService } from './app.service';
 import { LoggerMiddleware } from './loggermiddleware.middleware';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MemberService } from './member.service';
-import { MemberController } from './member.controller';
-import { Member, MemberSchema } from './domain/entity/member.schema';
+import * as memberSchema from './domain/entity/member.schema';
 import { MemberModule } from './member.module';
-import { Connection } from 'mongoose';
-
+import { Connection, Model } from 'mongoose';
+import { Member, MemberDocument, MemberSchema } from './domain/entity/member.schema';
 
 @Module({
   imports: [
@@ -23,30 +22,47 @@ import { Connection } from 'mongoose';
         maxRedirects: 5,
       }),
     }),
+
     MongooseModule.forRoot('mongodb+srv://easywaldo:rlekflqk1!@cluster0.figii.mongodb.net/sample_airbnb?retryWrites=true&w=majority', {
       connectionName: 'sample_airbnb',
-      // connectionFactory: (connection) => {
-      //   connection.plugin(require('mongoose-autopopulate'));
-      //   return connection;
-      // }
-    }),
-    MongooseModule.forRoot('mongodb+srv://easywaldo:rlekflqk1!@cluster0.figii.mongodb.net/easywaldo?retryWrites=true&w=majority', {
-      connectionName: 'member',
-      provide: MemberService,
-      useFactory: (memberConnection: Connection) => {
-        return new MemberService(memberConnection);
+      connectionFactory: (connection: Connection) => {
+        connection.plugin(require('mongoose-autopopulate'));
+        return connection;
       }
-  }),
+    }),
+
+    // MongooseModule.forRoot('mongodb+srv://easywaldo:rlekflqk1!@cluster0.figii.mongodb.net/easywaldo?retryWrites=true&w=majority', {
+    //   connectionName: 'member',
+    //   provide: MemberService, MemberSchema: memberSchema.MemberSchema,
+    //   useFactory: (memberConnection: Connection) => memberModelFn(memberConnection)
+    // }),
+
+    // MongooseModule.forRoot('mongodb+srv://easywaldo:rlekflqk1!@cluster0.figii.mongodb.net/easywaldo?retryWrites=true&w=majority', {
+    //   connectionFactory: (connection: Connection) => {
+    //     //connection.plugin(require('mongoose-autopopulate'));
+    //     provide: MemberService, MemberSchema: memberSchema.MemberSchema,
+    //     //return connection;
+    //   }
+    // }),
+
     //MongooseModule.forFeature([{ name: Member.name, schema: MemberSchema }], 'member'),
     MemberModule,
+
   ],
   controllers: [
     AppController,
   ],
   providers: [
-    CatsService, AppService,
+    CatsService, 
+    AppService,
   ],
 })
+
+
+//export const memberModelFn = (connection: Connection) => connection.model<MemberDocument>('Member', MemberSchema, 'member')
+
+
+
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
