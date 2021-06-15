@@ -15,8 +15,18 @@ export class MemberService {
 
     joinMember(joinRequestDto: JoinMemberRequestDto): Member {
         console.log(joinRequestDto);
-        return JoinMemberRequestDto.toEntity(
+        var member = JoinMemberRequestDto.toEntity(
             joinRequestDto.memberName, joinRequestDto.memberId, joinRequestDto.memberAge, joinRequestDto.memberPwd);
+        this.connection.collection('member').insertOne(member);
+        //const joinEntity = new this.memberModel(joinRequestDto);
+        //joinEntity.save();
+
+        // this.connection.models.Member.insertMany(member).then(function (result){
+        //     console.log('success', result);
+        // }).catch(function (err) { 
+        //     console.log(err);
+        // });
+        return member;
     }
 
     async findAll(): Promise<Array<Member>> {
