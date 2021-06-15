@@ -7,7 +7,8 @@ import { Connection } from 'mongoose';
 
 @Injectable()
 export class CatsService { 
-    constructor(private httpService: HttpService, @InjectConnection('easywaldo') private connection: Connection) {
+    constructor(private httpService: HttpService, @InjectConnection('sample_airbnb') private connection: Connection) {
+    
     }
 
     findAll(): Observable<Cat> {
@@ -25,7 +26,7 @@ export class CatsService {
     }
 
     findMongoDb(country : string): Promise<any> {
-        console.log(country);
+        console.log('country', country);
         let result = this.connection.collection('listingsAndReviews')
             .findOne({"address.country": country});
 

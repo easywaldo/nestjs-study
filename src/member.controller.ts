@@ -1,7 +1,7 @@
-import { Post } from "@nestjs/common";
+import { Get, Post } from "@nestjs/common";
 import { Body } from "@nestjs/common";
 import { Controller } from "@nestjs/common";
-import { Member } from "./domain/entity/Member";
+import { Member } from "./domain/entity/member.schema";
 import { JoinMemberRequestDto } from "./dto/JoinMemberRequestDto";
 import { MemberService } from "./member.service";
 
@@ -13,5 +13,11 @@ export class MemberController {
     joinMember(@Body() request: JoinMemberRequestDto): Member {
         var member = this.memberService.joinMember(request);
         return member;
+    }
+
+    @Get("findAll")
+    async findAll() : Promise<Member[]> {
+        var result = [];
+        return await this.memberService.findAll();
     }
 }
