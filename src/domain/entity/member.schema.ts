@@ -5,13 +5,13 @@ export type MemberDocument = Member & Document;
 @Schema()
 export class Member {
     @Prop({required: true})
-    private memberName : string;
-    @Prop({required: true})
-    private memberId : string;
-    @Prop({required: true})
-    private memberAge: number;
-    @Prop({required: true})
-    private memberPwd : string;
+     private memberName : string;
+     @Prop({required: true})
+     private memberId : string;
+     @Prop({required: true})
+     private memberAge: number;
+     @Prop({required: true})
+     private memberPwd : string;
 
     public constructor(
         memberName : string, 

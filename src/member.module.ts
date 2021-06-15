@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { getModelToken, MongooseModule } from '@nestjs/mongoose';
-import { connection } from 'mongoose';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { getModelToken, MongooseModule, ModelDefinition, getConnectionToken } from '@nestjs/mongoose';
+import { connection, Mongoose } from 'mongoose';
 import { Member, MemberSchema } from './domain/entity/member.schema';
 import { JoinMemberRequestDto } from './dto/JoinMemberRequestDto';
 import { LoggerMiddleware } from './loggermiddleware.middleware';
@@ -9,19 +10,17 @@ import { MemberService } from './member.service';
 
 @Module({
   imports: [
+      ConfigModule.forRoot(),
       MongooseModule.forRoot('mongodb+srv://easywaldo:rlekflqk1!@cluster0.figii.mongodb.net/easywaldo?retryWrites=true&w=majority', { 
-          //name: Member.name,
           connectionName: 'member',
           connectionFactory: (connection) => {
               connection.plugin(require('mongoose-autopopulate'));
               return connection;
           },
-          //schema: MemberSchema 
         }),
-        //MongooseModule.forFeature([{ name: 'Member', schema: MemberSchema }])
         MongooseModule.forFeature([
             {
-                name: Member.name,
+                name: 'member_model',
                 schema: MemberSchema,
                 discriminators: [
                   { name: JoinMemberRequestDto.name, schema: MemberSchema }
@@ -33,24 +32,25 @@ import { MemberService } from './member.service';
   providers: [
       MemberService,
         {
-            provide: getModelToken(Member.name),
-            //useValue: Member
-            useFactory: (connection, schema) => {
-                //const schema = MemberSchema;
-                const member = Member.name;
-                //schema.plugin(require('mongoose-autopopulate'));
-                //return new MemberService(connection, schema);
-                return schema;
+            name: 'member_service',
+            provide: 'member_model',
+            useFactory: (mongoose: Mongoose) => {
+                const schema = MemberSchema;
+                schema.pre('save', function() { 
+                    console.log('member saved...');
+                });
+                schema.plugin(require('mongoose-autopopulate'));
+                return mongoose.model('Member', schema);
             },
+            inject: [getConnectionToken('member')]
         }
     ],
 })
-//export class MemberModule {}
 
 export class MemberModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
       consumer
-        .apply(LoggerMiddleware)
+        .apply(LoggerMiddleware)    
         .forRoutes('member');
     }
 }

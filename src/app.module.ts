@@ -8,7 +8,6 @@ import { MemberService } from './member.service';
 import * as memberSchema from './domain/entity/member.schema';
 import { MemberModule } from './member.module';
 import { Connection, Model } from 'mongoose';
-import { Member, MemberDocument, MemberSchema } from './domain/entity/member.schema';
 
 @Module({
   imports: [
@@ -31,21 +30,6 @@ import { Member, MemberDocument, MemberSchema } from './domain/entity/member.sch
       }
     }),
 
-    // MongooseModule.forRoot('mongodb+srv://easywaldo:rlekflqk1!@cluster0.figii.mongodb.net/easywaldo?retryWrites=true&w=majority', {
-    //   connectionName: 'member',
-    //   provide: MemberService, MemberSchema: memberSchema.MemberSchema,
-    //   useFactory: (memberConnection: Connection) => memberModelFn(memberConnection)
-    // }),
-
-    // MongooseModule.forRoot('mongodb+srv://easywaldo:rlekflqk1!@cluster0.figii.mongodb.net/easywaldo?retryWrites=true&w=majority', {
-    //   connectionFactory: (connection: Connection) => {
-    //     //connection.plugin(require('mongoose-autopopulate'));
-    //     provide: MemberService, MemberSchema: memberSchema.MemberSchema,
-    //     //return connection;
-    //   }
-    // }),
-
-    //MongooseModule.forFeature([{ name: Member.name, schema: MemberSchema }], 'member'),
     MemberModule,
 
   ],
@@ -57,11 +41,6 @@ import { Member, MemberDocument, MemberSchema } from './domain/entity/member.sch
     AppService,
   ],
 })
-
-
-//export const memberModelFn = (connection: Connection) => connection.model<MemberDocument>('Member', MemberSchema, 'member')
-
-
 
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

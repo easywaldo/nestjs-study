@@ -1,3 +1,4 @@
+import { Inject } from "@nestjs/common";
 import { Injectable } from "@nestjs/common";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import { Connection, Model } from "mongoose";
@@ -6,26 +7,18 @@ import { JoinMemberRequestDto } from "./dto/JoinMemberRequestDto";
 
 @Injectable()
 export class MemberService {
-    //constructor(@InjectModel(Member.name) private readonly memberModel: Model<MemberDocument>) {}
-    //constructor(@InjectConnection() private connection: Connection) {}
     constructor(
         @InjectConnection('member') private connection: Connection,
-        @InjectModel(Member.name) private memberModel: Model<MemberDocument>
+        @Inject('member_model') private readonly memberModel: Model<MemberDocument>
     ) {}
 
     joinMember(joinRequestDto: JoinMemberRequestDto): Member {
-        console.log(joinRequestDto);
+        console.log('memberModel', this.memberModel);
         var member = JoinMemberRequestDto.toEntity(
             joinRequestDto.memberName, joinRequestDto.memberId, joinRequestDto.memberAge, joinRequestDto.memberPwd);
-        this.connection.collection('member').insertOne(member);
-        //const joinEntity = new this.memberModel(joinRequestDto);
-        //joinEntity.save();
-
-        // this.connection.models.Member.insertMany(member).then(function (result){
-        //     console.log('success', result);
-        // }).catch(function (err) { 
-        //     console.log(err);
-        // });
+        const joinEntity = new this.memberModel(joinRequestDto);
+        console.log('joinEntity', joinEntity);
+        joinEntity.save();
         return member;
     }
 
