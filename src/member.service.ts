@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import { Connection, Model } from "mongoose";
 import { Member, MemberDocument } from "./domain/entity/member.schema";
+import { DeleteMemberRequestDto } from "./dto/DeleteMemberRequestDto";
 import { JoinMemberRequestDto } from "./dto/JoinMemberRequestDto";
 
 @Injectable()
@@ -20,6 +21,15 @@ export class MemberService {
         console.log('joinEntity', joinEntity);
         joinEntity.save();
         return member;
+    }
+
+    deleteMember(deleteMemberRequestDto: DeleteMemberRequestDto): void {
+        console.log('deleteMemberRequestDto.memberId', deleteMemberRequestDto.memberId);
+        let member = this.connection.models.Member.find({memberId: deleteMemberRequestDto.memberId});
+        this.memberModel.deleteOne(member).exec().catch(function(err) {
+            console.log(err);
+            throw err;
+        });
     }
 
     async findAll(): Promise<Array<Member>> {
