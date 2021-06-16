@@ -28,50 +28,24 @@ export class MemberService {
         console.log('memberModel', this.memberModel);
         let awaitResult = await this.connection.models.Member.find({});
         console.log('awaitResult: ', awaitResult);
+        
+        //return awaitResult;               // 비동기방식 조회
+        return this.memberModel.find({});   // 동기식 조회
 
 
-        //return this.memberModel.find();
-
-
-        let resultList = this.connection.collection('member').find({});
-        var list = new Array<Member>();
-        return resultList.forEach(function(x) {
-            list.push(
-                new Member(x.memberName, x.memberId, x.memberAge, x.memberPwd)
-            );
-        }).then(function (r) {
-            console.log('list : ' , list);
-            return list;
-        }).catch(function (err) {
-            console.log(err);
-            return null;
-        });
-
-
-
-
-        //console.log(list);
-        //return list;
-
-
-
-
-        // return result.then(function (r) {
-        //     console.log(r);
-        //     return r;
-        // }).catch(function (err) { 
+        /* connection 내 컬렉션을 이용한 조회 방법 */
+        // let resultList = this.connection.collection('member').find({});
+        // var list = new Array<Member>();
+        // return resultList.forEach(function(x) {
+        //     list.push(
+        //         new Member(x.memberName, x.memberId, x.memberAge, x.memberPwd)
+        //     );
+        // }).then(function (r) {
+        //     console.log('list : ' , list);
+        //     return list;
+        // }).catch(function (err) {
+        //     console.log(err);
         //     return null;
         // });
-
-
-
-
-
-        // return result.then(function (r){
-        //     console.log(r);
-        //     return r;
-        // }).catch(function (err) { console.log(err)});
-        //console.log(this.memberModel);
-        //return this.memberModel.find().exec();
     }
 }
