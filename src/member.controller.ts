@@ -1,9 +1,10 @@
-import { Delete, Get, Post } from "@nestjs/common";
+import { Delete, Get, Post, Put } from "@nestjs/common";
 import { Body } from "@nestjs/common";
 import { Controller } from "@nestjs/common";
 import { Member } from "./domain/entity/member.schema";
 import { DeleteMemberRequestDto } from "./dto/DeleteMemberRequestDto";
 import { JoinMemberRequestDto } from "./dto/JoinMemberRequestDto";
+import { UpdateMemberRequestDto } from "./dto/UpdateMemberRequestDto";
 import { MemberService } from "./member.service";
 
 @Controller("member")
@@ -25,5 +26,10 @@ export class MemberController {
     async findAll() : Promise<Member[]> {
         var result = [];
         return await this.memberService.findAll();
+    }
+
+    @Put("update")
+    updateMember(@Body() request: UpdateMemberRequestDto): void {
+        this.memberService.updateMember(request);
     }
 }

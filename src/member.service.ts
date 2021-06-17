@@ -5,6 +5,7 @@ import { Connection, Model } from "mongoose";
 import { Member, MemberDocument } from "./domain/entity/member.schema";
 import { DeleteMemberRequestDto } from "./dto/DeleteMemberRequestDto";
 import { JoinMemberRequestDto } from "./dto/JoinMemberRequestDto";
+import { UpdateMemberRequestDto } from "./dto/UpdateMemberRequestDto";
 
 @Injectable()
 export class MemberService {
@@ -30,6 +31,16 @@ export class MemberService {
             console.log(err);
             throw err;
         });
+    }
+
+    updateMember(updateMemberRequestDto: UpdateMemberRequestDto): void {
+        console.log('updateMemberRequestDto', updateMemberRequestDto);
+        let member = this.connection.models.Member.find({memberId: updateMemberRequestDto.memberId});
+        this.memberModel.updateOne(updateMemberRequestDto).exec().catch(function (err){ 
+            console.log(err);
+            throw err;
+        });
+
     }
 
     async findAll(): Promise<Array<Member>> {
