@@ -1,12 +1,11 @@
 import { IsEmail, IsNotEmpty, Min } from 'class-validator';
 export class SampleRequestDto {
-
     @IsNotEmpty()
-    private carName : String;
+    private carName: string;
     @Min(1000)
-    private salePrice : Number;
+    private salePrice: number;
 
-    constructor(catName: String, salePrice: Number) {
+    constructor(catName: string, salePrice: number) {
         this.carName = catName;
         this.salePrice = salePrice;
     }
