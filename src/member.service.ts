@@ -1,11 +1,12 @@
-import { Inject } from "@nestjs/common";
-import { Injectable } from "@nestjs/common";
-import { InjectConnection, InjectModel } from "@nestjs/mongoose";
-import { Connection, Model } from "mongoose";
-import { Member, MemberDocument } from "./domain/entity/member.schema";
-import { DeleteMemberRequestDto } from "./dto/DeleteMemberRequestDto";
-import { JoinMemberRequestDto } from "./dto/JoinMemberRequestDto";
-import { UpdateMemberRequestDto } from "./dto/UpdateMemberRequestDto";
+import { Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
+import { Connection, Model } from 'mongoose';
+import { Member, MemberDocument } from './domain/entity/member.schema';
+import { DeleteMemberRequestDto } from './dto/DeleteMemberRequestDto';
+import { FindMemberRequestDto } from './dto/FindMemberRequestDto';
+import { JoinMemberRequestDto } from './dto/JoinMemberRequestDto';
+import { UpdateMemberRequestDto } from './dto/UpdateMemberRequestDto';
 
 @Injectable()
 export class MemberService {
@@ -14,10 +15,18 @@ export class MemberService {
         @Inject('member_model') private readonly memberModel: Model<MemberDocument>
     ) {}
 
-    joinMember(joinRequestDto: JoinMemberRequestDto): Member {
+    async joinMember(joinRequestDto: JoinMemberRequestDto): Promise<Member> {
         console.log('memberModel', this.memberModel);
-        var member = JoinMemberRequestDto.toEntity(
+
+        let member = JoinMemberRequestDto.toEntity(
             joinRequestDto.memberName, joinRequestDto.memberId, joinRequestDto.memberAge, joinRequestDto.memberPwd);
+
+        let findMember = await this.findMember(new FindMemberRequestDto(joinRequestDto.memberId));
+        if (findMember != null) {
+            console.log('duplicated member');
+            return member;
+        }
+
         const joinEntity = new this.memberModel(joinRequestDto);
         console.log('joinEntity', joinEntity);
         joinEntity.save();
@@ -36,11 +45,16 @@ export class MemberService {
     updateMember(updateMemberRequestDto: UpdateMemberRequestDto): void {
         console.log('updateMemberRequestDto', updateMemberRequestDto);
         let member = this.connection.models.Member.find({memberId: updateMemberRequestDto.memberId});
-        this.memberModel.updateOne(updateMemberRequestDto).exec().catch(function (err){ 
+        this.memberModel.updateOne(updateMemberRequestDto).set("memberName", updateMemberRequestDto.memberName).exec().catch(function (err){ 
             console.log(err);
             throw err;
         });
+    }
 
+    async findMember(findMemberRequestDto: FindMemberRequestDto): Promise<MemberDocument> {
+        let member = await this.memberModel.findOne({memberId: findMemberRequestDto.memberId});
+        console.log('findMember', member);
+        return member;
     }
 
     async findAll(): Promise<Array<Member>> {

@@ -1,6 +1,9 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class DeleteMemberRequestDto {
-    readonly memberId: string;
-    constructor(memberId: string) {
-        this.memberId = memberId;
-    }
+  @ApiProperty()
+  readonly memberId: string;
+  constructor(memberId: string) {
+    this.memberId = memberId;
+  }
 }
